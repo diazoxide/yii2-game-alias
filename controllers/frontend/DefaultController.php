@@ -7,32 +7,73 @@
 
 namespace diazoxide\yii2GameAlias\controllers\frontend;
 
+use diazoxide\yii2GameAlias\models\AliasWord;
+use diazoxide\yii2GameAlias\models\AliasSession;
 use diazoxide\yii2GameAlias\Module;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
+/**
+ * @property string cookieId
+ */
 class DefaultController extends Controller
 {
 
-    /**
-     * @inheritdoc
-     */
-    public function actions()
+    private $cookieKey = 'diazoxide_game_alias_session';
+
+    public function actionStart()
     {
-        return [
-            'captcha' => [
-                'class' => 'lesha724\MathCaptcha\MathCaptchaAction',
-            ],
-        ];
+        $model = new AliasSession();
+        $model->cookie_id = $this->cookieId;
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $this->redirect(['session', 'id' => $model->id]);
+        }
+
+
+        return $this->render('start', [
+            'model' => $model
+        ]);
+
     }
 
+    public function actionSession($id)
+    {
+
+
+        return $this->render('session');
+
+    }
 
     public function actionIndex()
     {
 
-        return $this->render('index');
+        echo $this->cookieId;
+        //return $this->render('index');
 
     }
 
+    /**
+     * @throws \yii\base\Exception
+     */
+    public function getCookieId()
+    {
+
+        $cookies = Yii::$app->request->cookies;
+
+        $id = $cookies->getValue($this->cookieKey, NULL);
+
+        if ($id == NULL) {
+
+            $id = Yii::$app->security->generateRandomString(12);
+
+            $cookies->add(new \yii\web\Cookie([
+                'name' => $this->cookieKey,
+                'value' => $id,
+            ]));
+        }
+
+        return $id;
+    }
 }
