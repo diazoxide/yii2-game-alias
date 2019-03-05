@@ -27,7 +27,7 @@
 
   "autoload": {
     "psr-4": {
-      "diazoxide\\blog\\": ""
+      "diazoxide\\yii2GameAlias\\": ""
     }
   }
 }
