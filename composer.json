@@ -1,0 +1,33 @@
+{
+  "name": "diazoxide/yii2-game-alias",
+  "description": "Yii2 Alias Game.",
+  "type": "yii2-extension",
+  "keywords": [
+    "yii2",
+    "extension",
+    "game",
+    "alias"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Diazoxide",
+      "email": "diazoxide@gmail.com"
+    }
+  ],
+
+  "require": {
+    "yiisoft/yii2": "*",
+    "yii-dream-team/yii2-upload-behavior": "dev-master",
+    "dektrium/yii2-user": "^0.9.14",
+    "dektrium/yii2-rbac": "^1.0",
+    "yiisoft/yii2-imagine": "*",
+    "bower-asset/font-awesome": "^5.7"
+  },
+
+  "autoload": {
+    "psr-4": {
+      "diazoxide\\blog\\": ""
+    }
+  }
+}
