@@ -18,12 +18,12 @@ use yii\web\NotFoundHttpException;
 use yii\db\Expression;
 
 /**
- * @property string cookieId
+ * @property string sessionId
  */
 class DefaultController extends Controller
 {
 
-    private $cookieKey = 'diazoxide_game_alias_session';
+    private $sessionId = 'diazoxide_game_alias_session';
 
 
     /**
@@ -36,7 +36,7 @@ class DefaultController extends Controller
             $model = $this->findSessionModel(Yii::$app->request->get('id'));
         } else {
             $model = new AliasSession();
-            $model->cookie_id = $this->cookieId;
+            $model->session_id = $this->sessionId;
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -166,7 +166,7 @@ class DefaultController extends Controller
 
     public function actionIndex()
     {
-        $sessions = AliasSession::findAll(['cookie_id' => $this->cookieId]);
+        $sessions = AliasSession::findAll(['session_id' => $this->sessionId]);
 
         return $this->render('index', [
             'sessions' => $sessions,
@@ -177,23 +177,19 @@ class DefaultController extends Controller
     /**
      * @throws \yii\base\Exception
      */
-    public function getCookieId()
+    public function getSessionId()
     {
 
-        $cookies = Yii::$app->request->cookies;
+        $session = Yii::$app->session;
 
-        $id = $cookies->getValue($this->cookieKey, NULL);
+        $id = $session->get($this->sessionId, NULL);
 
         if ($id == NULL) {
 
             $id = Yii::$app->security->generateRandomString(12);
 
-            $cookies = Yii::$app->response->cookies;
+            $session->set($this->sessionId,$id);
 
-            $cookies->add(new \yii\web\Cookie([
-                'name' => $this->cookieKey,
-                'value' => $id,
-            ]));
         }
 
         return $id;
@@ -201,12 +197,12 @@ class DefaultController extends Controller
 
     /**
      * @param $id
-     * @return AliasSession|null
+     * @return \yii\db\ActiveRecord
      * @throws NotFoundHttpException
      */
     protected function findSessionModel($id)
     {
-        if (($model = AliasSession::find()->where(['id'=>$id,'cookie_id'=>$this->cookieId])->one()) !== null) {
+        if (($model = AliasSession::find()->where(['id'=>$id,'session_id'=>$this->sessionId])->one()) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

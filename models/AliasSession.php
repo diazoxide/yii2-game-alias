@@ -14,7 +14,7 @@ use yii\behaviors\TimestampBehavior;
  * This is the model class for table "blog_comment".
  *
  * @property integer $id
- * @property string $cookie_id
+ * @property string $session_id
  * @property integer $created_at
  * @property integer $updated_at
  * @property AliasSessionPlayer[] players
@@ -49,9 +49,9 @@ class AliasSession extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['cookie_id', 'time', 'points'], 'required'],
+            [['session_id', 'time', 'points'], 'required'],
             [['time', 'points', 'player_id'], 'integer'],
-            [['cookie_id'], 'string', 'max' => 16],
+            [['session_id'], 'string', 'max' => 16],
         ];
     }
 
@@ -62,7 +62,7 @@ class AliasSession extends \yii\db\ActiveRecord
     {
         return [
             'id' => Module::t('ID'),
-            'cookie_id' => Module::t('Cookie ID'),
+            'session_id' => Module::t('Cookie ID'),
         ];
     }
 
