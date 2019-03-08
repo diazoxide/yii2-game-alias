@@ -9,10 +9,10 @@
 use diazoxide\yii2GameAlias\Module;
 use yii\helpers\Html;
 
-$this->title = Module::t($session->player->name . ' '.Module::t('Playing'));
-
 /** @var \diazoxide\yii2GameAlias\models\AliasSession $session */
 /** @var \diazoxide\yii2GameAlias\models\AliasWord[] $words */
+$this->title = Module::t($session->player->name . ' '.Module::t('Playing'));
+
 ?>
     <div class="text-center">
         <h1><?= $session->player->name; ?></h1>
