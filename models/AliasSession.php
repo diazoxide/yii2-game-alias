@@ -18,6 +18,7 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $created_at
  * @property integer $updated_at
  * @property AliasSessionPlayer[] players
+ * @property AliasSessionPlayer player
  *
  */
 class AliasSession extends \yii\db\ActiveRecord

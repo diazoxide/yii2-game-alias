@@ -197,7 +197,7 @@ class DefaultController extends Controller
 
     /**
      * @param $id
-     * @return \yii\db\ActiveRecord
+     * @return \yii\db\ActiveRecord|AliasSession
      * @throws NotFoundHttpException
      */
     protected function findSessionModel($id)
