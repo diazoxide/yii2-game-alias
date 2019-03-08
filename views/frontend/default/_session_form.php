@@ -25,9 +25,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->errorSummary($model); ?>
 
-    <?= $form->field($model, 'points')->textInput(['value' => '100']) ?>
+    <?= $form->field($model, 'points')->textInput() ?>
 
-    <?= $form->field($model, 'time')->textInput(['value' => '45']) ?>
+    <?= $form->field($model, 'time')->textInput() ?>
 
 
     <div class="col-md-12 text-right">

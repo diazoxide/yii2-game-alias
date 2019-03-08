@@ -84,6 +84,7 @@ class DefaultController extends Controller
         if ($session->isFinished()) {
             $this->redirect(['finish', 'session_id' => $session_id]);
         }
+
         if (!$session->player) {
             $player = $session->getPlayers()->one();
             $session->player_id = $player->id;
