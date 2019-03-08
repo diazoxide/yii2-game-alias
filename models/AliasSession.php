@@ -63,7 +63,7 @@ class AliasSession extends \yii\db\ActiveRecord
     {
         return [
             'id' => Module::t('ID'),
-            'session_id' => Module::t('Cookie ID'),
+            'session_id' => Module::t('Session ID'),
         ];
     }
 

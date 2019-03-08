@@ -180,15 +180,22 @@ class DefaultController extends Controller
     public function getSessionId()
     {
 
-        $session = Yii::$app->session;
+        // get the cookie collection (yii\web\CookieCollection) from the "response" component
+        $cookies = Yii::$app->response->cookies;
 
-        $id = $session->get($this->sessionId, NULL);
+        // add a new cookie to the response to be sent
+
+
+        $id = $cookies->getValue($this->sessionId, NULL);
 
         if ($id == NULL) {
 
             $id = Yii::$app->security->generateRandomString(12);
+            $cookies->add(new \yii\web\Cookie([
+                'name' => $this->sessionId,
+                'value' => $id,
+            ]));
 
-            $session->set($this->sessionId,$id);
 
         }
 
@@ -202,7 +209,7 @@ class DefaultController extends Controller
      */
     protected function findSessionModel($id)
     {
-        if (($model = AliasSession::find()->where(['id'=>$id,'session_id'=>$this->sessionId])->one()) !== null) {
+        if (($model = AliasSession::find()->where(['id' => $id, 'session_id' => $this->sessionId])->one()) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
