@@ -18,12 +18,12 @@ use yii\web\NotFoundHttpException;
 use yii\db\Expression;
 
 /**
- * @property string sessionId
+ * @property string cookieId
  */
 class DefaultController extends Controller
 {
 
-    private $sessionId = 'diazoxide_game_alias_session';
+    private $cookieKey = 'diazoxide_game_alias_session';
 
 
     /**
@@ -36,7 +36,7 @@ class DefaultController extends Controller
             $model = $this->findSessionModel(Yii::$app->request->get('id'));
         } else {
             $model = new AliasSession();
-            $model->session_id = $this->sessionId;
+            $model->session_id = $this->cookieId;
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -83,7 +83,10 @@ class DefaultController extends Controller
 
         if ($session->isFinished()) {
             $this->redirect(['finish', 'session_id' => $session_id]);
+        } else{
+            echo "111";
         }
+
 
         if (!$session->player) {
             $player = $session->getPlayers()->one();
@@ -166,7 +169,7 @@ class DefaultController extends Controller
 
     public function actionIndex()
     {
-        $sessions = AliasSession::findAll(['session_id' => $this->sessionId]);
+        $sessions = AliasSession::findAll(['session_id' => $this->cookieId]);
 
         return $this->render('index', [
             'sessions' => $sessions,
@@ -177,26 +180,23 @@ class DefaultController extends Controller
     /**
      * @throws \yii\base\Exception
      */
-    public function getSessionId()
+    public function getCookieId()
     {
 
-        // get the cookie collection (yii\web\CookieCollection) from the "response" component
-        $cookies = Yii::$app->response->cookies;
+        $cookies = Yii::$app->request->cookies;
 
-        // add a new cookie to the response to be sent
-
-
-        $id = $cookies->getValue($this->sessionId, NULL);
+        $id = $cookies->getValue($this->cookieKey, NULL);
 
         if ($id == NULL) {
 
             $id = Yii::$app->security->generateRandomString(12);
+
+            $cookies = Yii::$app->response->cookies;
+
             $cookies->add(new \yii\web\Cookie([
-                'name' => $this->sessionId,
+                'name' => $this->cookieKey,
                 'value' => $id,
             ]));
-
-
         }
 
         return $id;
@@ -204,12 +204,12 @@ class DefaultController extends Controller
 
     /**
      * @param $id
-     * @return \yii\db\ActiveRecord|AliasSession
+     * @return AliasSession|null
      * @throws NotFoundHttpException
      */
     protected function findSessionModel($id)
     {
-        if (($model = AliasSession::find()->where(['id' => $id, 'session_id' => $this->sessionId])->one()) !== null) {
+        if (($model = AliasSession::find()->where(['id'=>$id,'session_id'=>$this->cookieId])->one()) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
