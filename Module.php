@@ -4,6 +4,8 @@ namespace diazoxide\yii2GameAlias;
 
 use diazoxide\yii2GameAlias\assets\AppAsset;
 use Yii;
+use yii\bootstrap\Nav;
+use yii\bootstrap\NavBar;
 use yii\i18n\PhpMessageSource;
 
 /**
@@ -105,7 +107,8 @@ class Module extends \yii\base\Module
 
     }
 
-    public function getModuleId(){
+    public function getModuleId()
+    {
         return Yii::$app->controller->module->id;
     }
 
@@ -115,5 +118,6 @@ class Module extends \yii\base\Module
         $result[] = ['label' => Module::t($this->title), 'url' => $this->url];
         return $result;
     }
+
 
 }

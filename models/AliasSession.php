@@ -17,6 +17,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string $cookie_id
  * @property integer $created_at
  * @property integer $updated_at
+ * @property AliasSessionPlayer[] players
  *
  */
 class AliasSession extends \yii\db\ActiveRecord
@@ -48,7 +49,8 @@ class AliasSession extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['cookie_id'], 'required'],
+            [['cookie_id', 'time', 'points'], 'required'],
+            [['time', 'points', 'player_id'], 'integer'],
             [['cookie_id'], 'string', 'max' => 16],
         ];
     }
@@ -71,4 +73,38 @@ class AliasSession extends \yii\db\ActiveRecord
     }
 
 
+    public function getPlayer()
+    {
+        return $this->hasOne(AliasSessionPlayer::className(), ['id' => 'player_id']);
+    }
+
+    public function isFinished()
+    {
+        if ($this->getPlayers()->andWhere('points>=' . $this->points)->count()) {
+            return true;
+        }
+        return false;
+    }
+
+    public function reset()
+    {
+        foreach ($this->players as $player) {
+            $player->points = 0;
+            $player->save();
+        }
+    }
+
+    public function getName()
+    {
+        $title = Module::t('Game') . ' ';
+        $title .= "(";
+        foreach ($this->players as $pIndex => $player) {
+            $title .= $player->name;
+            if ($pIndex + 1 != count($this->players)) {
+                $title .= ',';
+            }
+        }
+        $title .= ")";
+        return $title;
+    }
 }

@@ -14,6 +14,7 @@ use yii\behaviors\TimestampBehavior;
  * This is the model class for table "blog_comment".
  *
  * @property integer $id
+ * @property integer $session_id
  * @property integer $created_at
  * @property integer $updated_at
  *
@@ -21,6 +22,7 @@ use yii\behaviors\TimestampBehavior;
 class AliasSessionPlayer extends \yii\db\ActiveRecord
 {
 
+    public $delete;
     /**
      * @inheritdoc
      */
@@ -36,7 +38,6 @@ class AliasSessionPlayer extends \yii\db\ActiveRecord
     public function behaviors()
     {
         return [
-            'class' => TimestampBehavior::className(),
         ];
     }
 
@@ -47,8 +48,8 @@ class AliasSessionPlayer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-//            [['id'], 'required'],
-//            [['title'], 'string', 'max' => 255],
+            [['session_id','name'], 'required'],
+            [['name'], 'string', 'max' => 255],
         ];
     }
 
